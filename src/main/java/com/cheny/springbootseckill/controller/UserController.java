@@ -1,7 +1,10 @@
 package com.cheny.springbootseckill.controller;
 
+import com.cheny.springbootseckill.pojo.User;
+import com.cheny.springbootseckill.vo.RespBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -17,5 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 @RequestMapping("/cheny/user")
 public class UserController {
+
+    @ResponseBody
+    @RequestMapping("info")
+    public RespBean info(User user){
+        return RespBean.success(user);
+    }
 
 }
