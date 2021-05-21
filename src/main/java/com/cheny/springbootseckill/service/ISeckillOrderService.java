@@ -2,10 +2,8 @@ package com.cheny.springbootseckill.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cheny.springbootseckill.pojo.Order;
 import com.cheny.springbootseckill.pojo.SeckillOrder;
 import com.cheny.springbootseckill.pojo.User;
-import com.cheny.springbootseckill.vo.GoodsVo;
 
 
 /**
@@ -18,6 +16,5 @@ import com.cheny.springbootseckill.vo.GoodsVo;
  */
 public interface ISeckillOrderService extends IService<SeckillOrder> {
 
-    SeckillOrder getOne(QueryWrapper<Object> eq);
-
+    Long getResult(User user, Long goodsId);
 }

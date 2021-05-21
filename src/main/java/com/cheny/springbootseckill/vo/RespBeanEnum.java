@@ -20,13 +20,15 @@ public enum RespBeanEnum {
     //全局异常
     BIND_ERROR(500212,"参数校验异常"),
     ACCESS_LIMIT_REAHCED(500216,"连接超时"),
-
+    ERROR_CAPTCHA(500217,"验证码出错"),
+    ACCESS_LIMIT_REACHED(500218,"访问过于频繁"),
     //订单模块
     ORDER_NOT_EXITS(500300,"订单信息不存在"),
 
     //秒杀模块
     EMPTY_STOCK(500500,"空库存"),
-    REPEAT_ERROR(500501,"重复购买")
+    REPEAT_ERROR(500501,"重复购买"),
+    REQUEST_ILLEGAL(500502,"请求非法，请重新尝试")
     ;
     private final  Integer code;
     private final String message;

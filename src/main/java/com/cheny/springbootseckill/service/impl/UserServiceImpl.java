@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author cheny
@@ -48,33 +48,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
 //        }
         User user = userMapper.selectById(mobile);
-        if(null == user){
+        if (null == user) {
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         }
 
-        if(!MD5Util.formPassToDBPass(password,user.getSalt()).equals(user.getPassword())){
+        if (!MD5Util.formPassToDBPass(password, user.getSalt()).equals(user.getPassword())) {
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         }
 
         String ticket = UUIDUtil.uuid();
 //        request.getSession().setAttribute(ticket,user);
-        redisTemplate.opsForValue().set("user:"+ticket,user);
-        CookieUtil.setCookie(request,response,"userTicket",ticket);
+        redisTemplate.opsForValue().set("user:" + ticket, user);
+        CookieUtil.setCookie(request, response, "userTicket", ticket);
 
-        return RespBean.success();
+        return RespBean.success(ticket);
 
     }
 
     @Override
-    public User getUserByCookie(String userTicket,HttpServletRequest request,HttpServletResponse response) {
-        if(StringUtils.isEmpty(userTicket)){
+    public User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response) {
+        if (StringUtils.isEmpty(userTicket)) {
             return null;
         }
-        User user = (User) redisTemplate.opsForValue().get("user:"+userTicket);
-        if(user!=null){
-            CookieUtil.setCookie(request,response,"userTicket",userTicket);
+        User user = (User) redisTemplate.opsForValue().get("user:" + userTicket);
+        if (user != null) {
+            CookieUtil.setCookie(request, response, "userTicket", userTicket);
         }
         return user;
+    }
+
+    @Override
+    public RespBean updatePassword(String userticket, String password, HttpServletRequest request, HttpServletResponse response) {
+        User user = getUserByCookie(userticket, request, response);
+        if (user == null) {
+            throw new GlobalException(RespBeanEnum.MOBILE_NOTEXIT);
+        }
+        user.setPassword(MD5Util.inputPassToDBPass(password, user.getSalt()));
+        int res = userMapper.updateById(user);
+        if (1 == res) {
+            redisTemplate.delete("user:" + userticket);
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.PASSWORD_UPDATE_FAIL);
     }
 
 

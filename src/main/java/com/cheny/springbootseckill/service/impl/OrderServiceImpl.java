@@ -15,16 +15,24 @@ import com.cheny.springbootseckill.service.IGoodsService;
 import com.cheny.springbootseckill.service.IOrderService;
 import com.cheny.springbootseckill.service.ISeckillGoodsService;
 import com.cheny.springbootseckill.service.ISeckillOrderService;
+import com.cheny.springbootseckill.utils.MD5Util;
+import com.cheny.springbootseckill.utils.UUIDUtil;
 import com.cheny.springbootseckill.vo.GoodsVo;
 import com.cheny.springbootseckill.vo.OrderDetailVo;
 import com.cheny.springbootseckill.vo.RespBeanEnum;
+import com.wf.captcha.base.Captcha;
+import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -43,6 +51,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private SeckillOrderMapper seckillOrderMapper;
     @Autowired
+    private ISeckillOrderService seckillOrderService;
+    @Autowired
     private OrderMapper orderMapper;
     @Autowired
     private IGoodsService goodsService;
@@ -59,17 +69,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional
     public Order seckill(User user, GoodsVo goods) {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
         //秒杀商品表减库存
-        SeckillGoods seckillGoods = seckillGoodsService.getOne(new
-                QueryWrapper<SeckillGoods>().eq("goods_id",
-                goods.getId()));
+        SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
         seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
-        seckillGoodsService.updateById(seckillGoods);
         boolean result = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>()
-                .setSql("stock_count = stock_count -1 ")
-                .eq("goods_id", goods.getId())
-                .gt("stock_count", 0));
-        if (!result) {
+                .setSql("stock_count = stock_count-1 ").eq("goods_id", goods.getId()).gt("stock_count", 0));
+        if (seckillGoods.getStockCount() < 1) {
+            valueOperations.set("isStockEmpty:" + goods.getId(), "0");
             return null;
         }
         //生成订单
@@ -91,11 +98,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         seckillOrder.setUserId(user.getId());
         seckillOrder.setGoodsId(goods.getId());
         System.out.println(seckillOrder);
-        try {
-            int insert = seckillOrderMapper.insert(seckillOrder);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        seckillOrderService.save(seckillOrder);
         redisTemplate.opsForValue().set("order:" + user.getId() + ":" + goods.getId(), seckillOrder);
         return order;
     }
@@ -112,5 +115,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         detail.setOrder(order);
         detail.setGoodsVo(goodsVo);
         return detail;
+    }
+
+    @Override
+    public String createPath(User user, Long goodsId) {
+        String str = MD5Util.md5(UUIDUtil.uuid() + "123456");
+        redisTemplate.opsForValue().set("seckillPath:" + user.getId()+":"+goodsId,str,60, TimeUnit.SECONDS);
+        return str;
+    }
+
+    @Override
+    public boolean checkPath(User user, Long goodsId,String path) {
+        if(user == null || goodsId<0|| StringUtils.isEmpty(path)){
+            return false;
+        }
+        String redisPath = (String) redisTemplate.opsForValue().get("seckillPath:" + user.getId() + ":" + goodsId);
+        return path.equals(redisPath);
+    }
+
+    @Override
+    public boolean checkCaptcha(User user, Long goodsId, String captcha) {
+        if(user == null || goodsId<0|| captcha == null){
+            return false;
+        }
+        String redisCaptcha = (String) redisTemplate.opsForValue().get("captcha:" + user.getId() + ":" + goodsId);
+        return captcha.equals(redisCaptcha);
     }
 }
