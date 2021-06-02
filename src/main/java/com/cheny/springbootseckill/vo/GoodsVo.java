@@ -13,8 +13,6 @@ import java.util.Date;
  * @ClassName GoodsVo
  * @Description 商品返回对象
  * @Author cheny
- * @Date 2021/5/13 11:36
- * @Version 1.0
  **/
 @Data
 @NoArgsConstructor

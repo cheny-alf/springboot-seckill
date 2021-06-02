@@ -17,8 +17,6 @@ import java.util.Date;
  * 
  * </p>
  *
- * @author cheny
- * @since 2021-05-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

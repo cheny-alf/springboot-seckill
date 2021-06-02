@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  * 前端控制器
  * </p>
  *
- * @author cheny
- * @since 2021-05-10
  */
 @Controller
 @RequestMapping("/user")

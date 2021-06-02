@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
  *  服务实现类
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 @Service
 public class SeckillGoodsServiceImpl extends ServiceImpl<SeckillGoodsMapper, SeckillGoods> implements ISeckillGoodsService {

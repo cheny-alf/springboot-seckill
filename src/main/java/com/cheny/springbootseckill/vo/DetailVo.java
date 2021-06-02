@@ -7,8 +7,6 @@ import lombok.Data;
  * @ClassName DetailVo
  * @Description 详情返回对象
  * @Author cheny
- * @Date 2021/5/15 21:44
- * @Version 1.0
  **/
 @Data
 public class DetailVo {

@@ -37,13 +37,7 @@ import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @ClassName seckillController
- * @Description this is a seckillController
- * @Author cheny
- * @Date 2021/5/13 18:54
- * @Version 1.0
- **/
+
 @Slf4j
 @Controller
 @RequestMapping(value = "/seckill")

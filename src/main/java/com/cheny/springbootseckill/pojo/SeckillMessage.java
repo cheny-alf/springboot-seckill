@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 /**
  * @ClassName SeckillMessage
  * @Description 秒杀信息
- * @Author cheny
- * @Date 2021/5/17 19:45
- * @Version 1.0
  **/
 @Data
 @NoArgsConstructor

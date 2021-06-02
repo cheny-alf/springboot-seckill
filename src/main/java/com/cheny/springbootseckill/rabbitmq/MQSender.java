@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 /**
  * @ClassName MQSender
  * @Description 消息发送者
- * @Author cheny
- * @Date 2021/5/17 13:32
- * @Version 1.0
  **/
 @Service
 @Slf4j

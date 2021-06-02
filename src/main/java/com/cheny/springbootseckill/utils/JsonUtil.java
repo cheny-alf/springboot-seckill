@@ -10,9 +10,6 @@ import java.util.List;
 /**
  * @ClassName JsonUtil
  * @Description json工具类
- * @Author cheny
- * @Date 2021/5/17 20:06
- * @Version 1.0
  **/
 public class JsonUtil {
 

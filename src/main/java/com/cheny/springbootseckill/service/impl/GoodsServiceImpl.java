@@ -16,8 +16,6 @@ import java.util.List;
  *  服务实现类
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {

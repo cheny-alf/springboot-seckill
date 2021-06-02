@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
  * @ClassName MQReceiver
  * @Description 消息接收者
  * @Author cheny
- * @Date 2021/5/17 13:35
- * @Version 1.0
  **/
 @Service
 @Slf4j

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
  * @ClassName OrderDetailVo
  * @Description 下单对象
  * @Author cheny
- * @Date 2021/5/17 11:23
- * @Version 1.0
  **/
 @Data
 @NoArgsConstructor

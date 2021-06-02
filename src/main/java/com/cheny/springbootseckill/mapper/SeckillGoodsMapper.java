@@ -9,8 +9,6 @@ import com.cheny.springbootseckill.pojo.SeckillGoods;
  *  Mapper 接口
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 public interface SeckillGoodsMapper extends BaseMapper<SeckillGoods> {
 

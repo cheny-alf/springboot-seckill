@@ -11,8 +11,6 @@ import com.cheny.springbootseckill.pojo.User;
  *  服务类
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 public interface ISeckillOrderService extends IService<SeckillOrder> {
 

@@ -9,8 +9,6 @@ import com.cheny.springbootseckill.pojo.SeckillOrder;
  *  Mapper 接口
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 public interface SeckillOrderMapper extends BaseMapper<SeckillOrder> {
 

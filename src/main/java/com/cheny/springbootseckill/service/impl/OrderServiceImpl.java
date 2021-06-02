@@ -40,8 +40,6 @@ import java.util.concurrent.TimeUnit;
  * 服务实现类
  * </p>
  *
- * @author cheny
- * @since 2021-05-13
  */
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
